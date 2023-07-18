@@ -126,6 +126,7 @@ button:hover {
   width: 50%;
   background-color: gold;
   overflow: hidden;
+  border: 1px solid black;
 }
 
 .left-door-open {
@@ -146,4 +147,10 @@ button:hover {
 .right-door-close {
   transform: translateX(0%);
   transition: transform 2000ms linear;
+}
+
+@media (max-width: 400px) {
+  .lift {
+    width: 50px;
+  }
 }

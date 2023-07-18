@@ -10,6 +10,14 @@ function generateUI(event) {
 }
 let screenWidth = window.innerWidth;
 let screenHeight = window.innerHeight;
+
+window.addEventListener("load", () => {
+  if (screenWidth < 220) {
+    alert(
+      "Screen size is too small. Lift simulation wouldn't work on this device."
+    );
+  }
+});
 let maxFloors;
 let maxLifts;
 let form = document.querySelector("form");
@@ -20,10 +28,12 @@ function calculateMaxInputValues() {
   screenHeight = window.innerHeight;
   maxLifts = parseInt(screenWidth / 100) - 3;
   maxFloors = parseInt(screenHeight / 100) - 2;
-  if (screenWidth < 300) {
+  if (screenWidth < 400 && screenWidth >= 300) {
+    maxLifts = 2;
+  } else if (screenWidth < 330) {
     maxLifts = 1;
   }
-  if (screenHeight < 200) {
+  if (screenHeight < 299) {
     maxFloors = 2;
   }
   if (maxLifts > maxFloors) {
@@ -53,7 +63,6 @@ function validateInput(numFloors, numLifts) {
 }
 
 function handleButtonClick(event) {
-  console.log("Hello");
   floorId = parseInt(event.id[event.id.length - 1]);
   if (
     pendingRequests.includes(floorId) == false &&
