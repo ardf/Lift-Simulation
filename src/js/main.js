@@ -34,13 +34,20 @@ function calculateMaxInputValues() {
   }
 
   let numLiftsInput = document.querySelector("#num_lifts");
+  numLiftsInput.max = maxLifts;
   numLiftsInput.placeholder = `Max ${maxLifts}`;
 }
 window.addEventListener("resize", calculateMaxInputValues);
 window.addEventListener("load", calculateMaxInputValues);
 
 function validateInput(numFloors, numLifts) {
-  if (numLifts > maxLifts) {
+  if (numLifts == NaN || numFloors == NaN) {
+    alert(`Input fields can not be empty`);
+    return false;
+  } else if (numFloors <= 0 || numLifts <= 0) {
+    alert("Number of Floors and Number of lifts must be a positive integer,");
+    return false;
+  } else if (numLifts > maxLifts) {
     alert(`Please enter number of lifts less than or equal to ${maxLifts}.`);
     return false;
   } else if (numLifts > numFloors) {
@@ -48,15 +55,12 @@ function validateInput(numFloors, numLifts) {
       `Please enter number of lifts less than or equal to number of floors.`
     );
     return false;
-  } else if (numFloors <= 0 || numLifts <= 0) {
-    alert("Number of Floors and Number of lifts must be a positive integer,");
-    return false;
   }
   return true;
 }
 
 function handleButtonClick(event) {
-  floorId = parseInt(event.id[event.id.length - 1]);
+  floorId = getNumFromIdString(event.id);
   if (
     pendingRequests.includes(floorId) == false &&
     servingRequests.includes(floorId) == false
@@ -144,9 +148,7 @@ function liftController() {
   if (pendingRequests.length > 0) {
     const nearestLift = getNearestAvailableLift(pendingRequests[0]);
     if (nearestLift) {
-      liftId = parseInt(
-        nearestLift.htmlEl.id[nearestLift.htmlEl.id.length - 1]
-      );
+      liftId = getNumFromIdString(nearestLift.htmlEl.id);
       moveLift(liftId, pendingRequests[0]);
     }
   }
@@ -220,3 +222,9 @@ let pendingRequests = [];
 let servingRequests = [];
 
 setInterval(liftController, 50);
+
+function getNumFromIdString(string) {
+  const regex = /\d+/;
+  const match = regex.exec(string);
+  return match ? parseInt(match[0], 10) : null;
+}
