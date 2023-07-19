@@ -27,31 +27,21 @@ function calculateMaxInputValues() {
   screenWidth = window.innerWidth;
   screenHeight = window.innerHeight;
   maxLifts = parseInt(screenWidth / 100) - 3;
-  maxFloors = parseInt(screenHeight / 100) - 2;
-  if (screenWidth < 400 && screenWidth >= 300) {
+  if (screenWidth < 500 && screenWidth >= 300) {
     maxLifts = 2;
   } else if (screenWidth < 330) {
     maxLifts = 1;
   }
-  if (screenHeight < 299) {
-    maxFloors = 2;
-  }
-  if (maxLifts > maxFloors) {
-    maxLifts = maxFloors;
-  }
-  let numFloorsInput = document.querySelector("#num_floors");
+
   let numLiftsInput = document.querySelector("#num_lifts");
-  numFloorsInput.placeholder = `Max ${maxFloors}`;
   numLiftsInput.placeholder = `Max ${maxLifts}`;
 }
 window.addEventListener("resize", calculateMaxInputValues);
 window.addEventListener("load", calculateMaxInputValues);
 
 function validateInput(numFloors, numLifts) {
-  if (numFloors > maxFloors || numLifts > maxLifts) {
-    alert(
-      `Please enter a number of floors less than or equal to ${maxFloors} and a number of lifts less than or equal to ${maxLifts}.`
-    );
+  if (numLifts > maxLifts) {
+    alert(`Please enter number of lifts less than or equal to ${maxLifts}.`);
     return false;
   } else if (numLifts > numFloors) {
     alert(
