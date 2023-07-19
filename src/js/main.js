@@ -48,6 +48,9 @@ function validateInput(numFloors, numLifts) {
       `Please enter number of lifts less than or equal to number of floors.`
     );
     return false;
+  } else if (numFloors <= 0 || numLifts <= 0) {
+    alert("Number of Floors and Number of lifts must be a positive integer,");
+    return false;
   }
   return true;
 }
