@@ -43,7 +43,21 @@ input[type="number"] {
   padding: 5px;
   /* border-radius: 5px; */
 }
-
+#backBtnDiv {
+  text-align: center;
+  display: none;
+}
+#backBtn {
+  border-radius: 5px;
+  width: fit-content;
+  padding: 3px;
+  margin: 0 auto;
+}
+#backBtn:hover {
+  cursor: pointer;
+  background-color: lightskyblue;
+  transform: scale(1.1);
+}
 .building {
   position: absolute;
   left: 0;

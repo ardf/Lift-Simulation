@@ -1,3 +1,12 @@
+let formDiv = document.querySelector("#inputForm");
+let backBtnDiv = document.querySelector("#backBtnDiv");
+let backBtn = document.querySelector("#backBtn");
+
+backBtn.addEventListener("click", () => {
+  backBtnDiv.style.display = "none";
+  formDiv.style.display = "block";
+  renderBuilding(0, 0);
+});
 function generateUI(event) {
   event.preventDefault();
   let numFloorsInput = document.querySelector("#num_floors");
@@ -5,6 +14,8 @@ function generateUI(event) {
   let numFloors = parseInt(numFloorsInput.value);
   let numLifts = parseInt(numLiftsInput.value);
   if (validateInput(numFloors, numLifts)) {
+    formDiv.style.display = "none";
+    backBtnDiv.style.display = "block";
     renderBuilding(numFloors, numLifts);
   }
 }
@@ -27,31 +38,28 @@ function calculateMaxInputValues() {
   screenWidth = window.innerWidth;
   screenHeight = window.innerHeight;
   maxLifts = parseInt(screenWidth / 100) - 3;
-  maxFloors = parseInt(screenHeight / 100) - 2;
-  if (screenWidth < 400 && screenWidth >= 300) {
+  if (screenWidth < 500 && screenWidth >= 300) {
     maxLifts = 2;
   } else if (screenWidth < 330) {
     maxLifts = 1;
   }
-  if (screenHeight < 299) {
-    maxFloors = 2;
-  }
-  if (maxLifts > maxFloors) {
-    maxLifts = maxFloors;
-  }
-  let numFloorsInput = document.querySelector("#num_floors");
+
   let numLiftsInput = document.querySelector("#num_lifts");
-  numFloorsInput.placeholder = `Max ${maxFloors}`;
+  numLiftsInput.max = maxLifts;
   numLiftsInput.placeholder = `Max ${maxLifts}`;
 }
 window.addEventListener("resize", calculateMaxInputValues);
 window.addEventListener("load", calculateMaxInputValues);
 
 function validateInput(numFloors, numLifts) {
-  if (numFloors > maxFloors || numLifts > maxLifts) {
-    alert(
-      `Please enter a number of floors less than or equal to ${maxFloors} and a number of lifts less than or equal to ${maxLifts}.`
-    );
+  if (numLifts == NaN || numFloors == NaN) {
+    alert(`Input fields can not be empty`);
+    return false;
+  } else if (numFloors <= 0 || numLifts <= 0) {
+    alert("Number of Floors and Number of lifts must be a positive integer,");
+    return false;
+  } else if (numLifts > maxLifts) {
+    alert(`Please enter number of lifts less than or equal to ${maxLifts}.`);
     return false;
   } else if (numLifts > numFloors) {
     alert(
@@ -63,7 +71,7 @@ function validateInput(numFloors, numLifts) {
 }
 
 function handleButtonClick(event) {
-  floorId = parseInt(event.id[event.id.length - 1]);
+  floorId = getNumFromIdString(event.id);
   if (
     pendingRequests.includes(floorId) == false &&
     servingRequests.includes(floorId) == false
@@ -151,9 +159,7 @@ function liftController() {
   if (pendingRequests.length > 0) {
     const nearestLift = getNearestAvailableLift(pendingRequests[0]);
     if (nearestLift) {
-      liftId = parseInt(
-        nearestLift.htmlEl.id[nearestLift.htmlEl.id.length - 1]
-      );
+      liftId = getNumFromIdString(nearestLift.htmlEl.id);
       moveLift(liftId, pendingRequests[0]);
     }
   }
@@ -227,3 +233,9 @@ let pendingRequests = [];
 let servingRequests = [];
 
 setInterval(liftController, 50);
+
+function getNumFromIdString(string) {
+  const regex = /\d+/;
+  const match = regex.exec(string);
+  return match ? parseInt(match[0], 10) : null;
+}
