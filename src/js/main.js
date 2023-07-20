@@ -1,3 +1,12 @@
+let formDiv = document.querySelector("#inputForm");
+let backBtnDiv = document.querySelector("#backBtnDiv");
+let backBtn = document.querySelector("#backBtn");
+
+backBtn.addEventListener("click", () => {
+  backBtnDiv.style.display = "none";
+  formDiv.style.display = "block";
+  renderBuilding(0, 0);
+});
 function generateUI(event) {
   event.preventDefault();
   let numFloorsInput = document.querySelector("#num_floors");
@@ -5,6 +14,8 @@ function generateUI(event) {
   let numFloors = parseInt(numFloorsInput.value);
   let numLifts = parseInt(numLiftsInput.value);
   if (validateInput(numFloors, numLifts)) {
+    formDiv.style.display = "none";
+    backBtnDiv.style.display = "block";
     renderBuilding(numFloors, numLifts);
   }
 }
